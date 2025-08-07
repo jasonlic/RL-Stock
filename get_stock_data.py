@@ -39,6 +39,9 @@ class Downloader(object):
     def run(self):
         stock_df = self.get_codes_by_date(self.date_end)
         for index, row in stock_df.iterrows():
+            if '*' in row["code_name"]:
+                print('jump over', row["code_name"])
+                continue
             print(f'processing {row["code"]} {row["code_name"]}')
             df_code = bs.query_history_k_data_plus(row["code"], self.fields,
                                                    start_date=self.date_start,
