@@ -1,7 +1,7 @@
 import baostock as bs
 import pandas as pd
 import os
-
+import datetime
 
 OUTPUT = './stockdata'
 
@@ -15,12 +15,12 @@ class Downloader(object):
     def __init__(self,
                  output_dir,
                  date_start='1990-01-01',
-                 date_end='2020-03-23'):
+                 date_end='2025-08-16'):
         self._bs = bs
         bs.login()
         self.date_start = date_start
-        # self.date_end = datetime.datetime.now().strftime("%Y-%m-%d")
-        self.date_end = date_end
+        self.date_end = datetime.datetime.now().strftime("%Y-%m-%d")
+        #self.date_end = date_end
         self.output_dir = output_dir
         self.fields = "date,code,open,high,low,close,volume,amount," \
                       "adjustflag,turn,tradestatus,pctChg,peTTM," \
@@ -44,9 +44,10 @@ class Downloader(object):
         mask = stock_df['code_name'].str.contains(target_str)
         start_idx = stock_df[mask].index[0] 
         print(mask,start_idx)
-        '''
-        start_idx = 0
+ 
         for index, row in stock_df.loc[start_idx:].iterrows(): #stock_df.iterrows():
+        '''
+        for index, row in stock_df.iterrows():
             if '*' in row["code_name"]: #jump over nmaes which has *
                 print('jump over', row["code_name"])
                 continue
@@ -62,10 +63,10 @@ class Downloader(object):
 if __name__ == '__main__':
     # 获取全部股票的日K线数据
     mkdir('./stockdata/train')
-    downloader = Downloader('./stockdata/train', date_start='1990-01-01', date_end='2025-08-06')
+    downloader = Downloader('./stockdata/train', date_start='1990-01-01', date_end='2025-08-16')
     downloader.run()
 
     mkdir('./stockdata/test')
-    downloader = Downloader('./stockdata/test', date_start='2025-07-01', date_end='2025-08-06')
+    downloader = Downloader('./stockdata/test', date_start='2025-01-01', date_end='2025-08-16')
     downloader.run()
 
